@@ -423,7 +423,15 @@ def tvnamer(paths):
         apikey=api_key,
     )
 
+    force_season = None
+    if Config["force_season"]:
+        force_season = int(Config["force_season"])
+        print("Forcing season number to %d" % force_season)
+
     for episode in episodes_found:
+        if force_season:
+            episode.seasonnumber=force_season
+
         process_file(tvdb_instance, episode)
         print("")
 

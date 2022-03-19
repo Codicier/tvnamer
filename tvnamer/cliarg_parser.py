@@ -68,6 +68,7 @@ def get_cli_parser(defaults):
         g.add_option("--series-id", action="store", dest="series_id", help="explicitly set the show id for TVdb to use (applies to all files)")
         g.add_option("--order", action="store", dest="order", help="set the TvDB episode order ('aired' [default] or 'dvd')")
         g.add_option("-l", "--lang", action="store", dest="language", help="set the language used to retrieve data")
+        g.add_option("--season", action="store", dest="force_season", help="Override any parsed season number with this (applies to all files)")
 
     # Misc
     with Group(parser, "Misc") as g:
