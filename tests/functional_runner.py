@@ -57,7 +57,7 @@ def make_temp_config(config):
     """Creates a temporary file containing the supplied config (string)
     """
     (fhandle, fname) = tempfile.mkstemp()
-    f = open(fname, 'w+')
+    f = os.fdopen(fhandle, 'w+')
     f.write(config)
     f.close()
 
@@ -117,7 +117,9 @@ def run_tvnamer(with_files, with_flags = None, with_input = "", with_config = No
         configfname = make_temp_config(with_config)
         conf_args = ['-c', configfname]
     else:
-        conf_args = []
+        #Empty config so we don't conflict with any existing system config.
+        configfname = make_temp_config("{}")
+        conf_args = ['-c', configfname]
 
     if with_flags is None:
         with_flags = []
@@ -174,10 +176,10 @@ def run_tvnamer(with_files, with_flags = None, with_input = "", with_config = No
 
         created_files.extend(curlist)
 
-    # Clean up dummy files and config
-    clear_temp_dir(episodes_location)
+    # Clean up dummy files and config    
     if with_config is not None:
         os.unlink(configfname)
+    clear_temp_dir(episodes_location)
 
     return {
         'output': output,

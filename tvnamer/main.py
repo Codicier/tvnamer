@@ -486,7 +486,9 @@ def main():
             LOG.warning("Config must be moved to new location: ~/.config/tvnamer/tvnamer.json")
 
         try:
-            loaded_config = json.load(open(os.path.expanduser(config_to_load)))
+            config_file = open(os.path.expanduser(config_to_load))
+            loaded_config = json.load(config_file)
+            config_file.close()
         except ValueError as e:
             LOG.error("Error loading config: %s" % e)
             opter.exit(1)
@@ -503,13 +505,14 @@ def main():
         del config_to_save["saveconfig"]
         del config_to_save["loadconfig"]
         del config_to_save["showconfig"]
+        config_file = open(os.path.expanduser(opts.saveconfig), "w+")
         json.dump(
             config_to_save,
-            open(os.path.expanduser(opts.saveconfig), "w+"),
+            config_file,
             sort_keys=True,
             indent=4,
         )
-
+        config_file.close()
         opter.exit(0)
 
     # Show config argument
